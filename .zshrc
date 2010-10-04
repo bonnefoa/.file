@@ -39,8 +39,8 @@ alias ls='ls --classify --tabsize=0 --literal --color=auto --show-control-chars 
 alias grep='grep --color=auto'
 
 # Demande confirmation avant d'écraser un fichier
-alias cp='cp --interactive'
-alias mv='mv --interactive'
+#alias cp='cp --interactive'
+#alias mv='mv --interactive'
 #alias rm='rm --interactive'
 
 # Raccourcis pour 'ls'
@@ -284,3 +284,4 @@ zstyle ':completion:*' verbose yes
 autoload -U compinit
 compinit
 
+export M2_HOME=/opt/maven/
