@@ -63,5 +63,6 @@ myKeys(XConfig {modMask = modm})= M.fromList $
      , ((modm, xK_Left), spawn "mpc prev")
      , ((modm, xK_Down), spawn "mpc toggle")
      , ((modm, xK_Right), spawn "mpc next")
+     , ((modm, xK_BackSpace), spawn "suppr.sh")
      ]
 
