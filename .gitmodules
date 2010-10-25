@@ -1,0 +1,48 @@
+[submodule ".vim/bundle/nerdtree"]
+	path = .vim/bundle/nerdtree
+	url = http://github.com/scrooloose/nerdtree.git
+[submodule ".vim/bundle/vim-surroung"]
+	path = .vim/bundle/vim-surroung
+	url = http://github.com/tpope/vim-surround.git
+[submodule ".vim/bundle/vim-surround"]
+	path = .vim/bundle/vim-surround
+	url = http://github.com/tpope/vim-surround.git
+[submodule ".vim/bundle/vim-ragtag"]
+	path = .vim/bundle/vim-ragtag
+	url = http://github.com/tpope/vim-ragtag.git
+[submodule ".vim/bundle/nerd_commenter"]
+	path = .vim/bundle/nerd_commenter
+	url = http://github.com/scrooloose/nerdcommenter.git
+[submodule ".vim/bundle/command-t"]
+	path = .vim/bundle/command-t
+	url = git://git.wincent.com/command-t.git
+[submodule ".vim/bundle/align"]
+	path = .vim/bundle/align
+	url = http://github.com/tsaleh/vim-align.git
+[submodule ".vim/bundle/vim-matchit"]
+	path = .vim/bundle/vim-matchit
+	url = http://github.com/tsaleh/vim-matchit.git
+[submodule ".vim/bundle/vim-snipmate"]
+	path = .vim/bundle/vim-snipmate
+	url = http://github.com/msanders/snipmate.vim.git
+[submodule ".vim/bundle/vim-bufexplorer"]
+	path = .vim/bundle/vim-bufexplorer
+	url = http://github.com/bronson/vim-bufexplorer.git
+[submodule ".vim/bundle/vim-pyflakes"]
+	path = .vim/bundle/vim-pyflakes
+	url = http://github.com/kevinw/pyflakes-vim.git
+[submodule ".vim/bundle/vim-fuzzyfinder"]
+	path = .vim/bundle/vim-fuzzyfinder
+	url = http://github.com/vim-bundles/fuzzyfinder.git
+[submodule ".vim/bundle/vim-markdown"]
+	path = .vim/bundle/vim-markdown
+	url = http://github.com/tpope/vim-markdown.git
+[submodule ".vim/bundle/vim-fugitive"]
+	path = .vim/bundle/vim-fugitive
+	url = http://github.com/tpope/vim-fugitive.git
+[submodule ".vim/bundle/vim-sparkup2"]
+	path = .vim/bundle/vim-sparkup2
+	url = http://github.com/sophacles/vim-bundle-sparkup.git
+[submodule ".vim/bundle/ack"]
+	path = .vim/bundle/ack
+	url = http://github.com/mileszs/ack.vim.git
