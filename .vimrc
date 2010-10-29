@@ -1,12 +1,27 @@
 colorscheme desert
 
+filetype off 
+call pathogen#runtime_append_all_bundles()
+filetype plugin on
+call pathogen#helptags()
+
+let mapleader = ","
+let g:mapleader = ","
+
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
+" empty search
+nmap <silent> ,/ :nohlsearch<CR>
+
+map <F10> <Esc>:tabnew<CR> 
+
 " Set 'nocompatible' to ward off unexpected things that your distro might
 " have made, as well as sanely reset options when re-sourcing .vimrc
 set nocompatible
 " Attempt to determine the type of a file based on its name and possibly its
 " contents.  Use this to allow intelligent auto-indenting for each filetype
 " and for plugins that are filetype specific.
-filetype plugin on
 filetype indent on
 " Enable syntax highlighting
 syntax on
@@ -15,9 +30,14 @@ syntax on
 " history for multiple files. Vim will complain if you try to quit without
 " saving, and swap files will keep you safe if your computer crashes.
 set hidden
-set autochdir
+"set autochdir
 set showmatch
 set autowrite 
+
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
 
 " Better command-line completion
 set wildmenu
@@ -90,8 +110,22 @@ let g:haddock_browser = "/usr/bin/firefox"
 
 set tags=TAGS;$HOME
 
-map <F10> <Esc>:tabnew<CR> 
 
 " Automatically generate tags 
-au BufWritePost .hs,.lhs !hasktags -R &
+"au BufWritePost *.hs,*.lhs !hasktgs -R 
+
+function! UPDATE_TAGS()
+  let _f_ = expand("%:p")
+  let _cmd_ = 'find . -name "*.hs" | xargs hasktags' 
+  let _sed_ = "sed -i \'/^(/d\' TAGS"
+  let _list = system(_cmd_)
+  let _list2 = system(_sed_)
+  unlet _f_
+  unlet _cmd_
+  unlet _sed_ 
+  unlet _list
+  unlet _list2
+endfunction
+
+autocmd BufWrite *.hs call UPDATE_TAGS()
 
