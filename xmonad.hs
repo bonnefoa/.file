@@ -15,7 +15,6 @@ import XMonad.Layout.NoBorders
 import qualified XMonad.StackSet as W
 import XMonad.Hooks.ManageHelpers
 
-
 main = do 
     xmobar <- spawnPipe "/usr/bin/xmobar"
     xmonad $ defaultConfig 
@@ -24,24 +23,14 @@ main = do
       , focusedBorderColor="#9492F" 
       , borderWidth = 1
       , keys = \c -> myKeys c `M.union` keys defaultConfig c
-      , logHook  = myLogHook3 xmobar
+      , logHook  = myLogHook xmobar
       , manageHook = myManageDocks <+> manageHook defaultConfig
       , startupHook = setWMName "LG3D"
       , layoutHook = smartBorders (avoidStruts  $  layoutHook defaultConfig)
       }
 
 myLogHook :: Handle -> X ()
-myLogHook xmobar = dynamicLogWithPP $ xmobarPP 
-                     { ppOutput = hPutStrLn xmobar
-                     , ppTitle = xmobarColor "green" "" . shorten 50
-                     }
--- Compositing
-myLogHook2 :: X ()
-myLogHook2 = fadeInactiveLogHook fadeAmount
-      where fadeAmount = 0xdddddddd
-
-myLogHook3 :: Handle -> X ()
-myLogHook3 xmobar = do
+myLogHook xmobar = do
     dynamicLogWithPP $ xmobarPP 
                      { ppOutput = hPutStrLn xmobar
                      , ppTitle = xmobarColor "green" "" . shorten 50
@@ -52,9 +41,8 @@ myLogHook3 xmobar = do
 myManageDocks = manageDocks <+> (composeAll $
 -- Allows focusing other monitors without killing the fullscreen
    [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ] 
-   ++ [title =? t --> doFloat | t <- ["comix", "java", "vlc","python" ]]
+   ++ [title =? t --> doFloat | t <- []]
   )
-
 
 myKeys(XConfig {modMask = modm})= M.fromList $ 
      -- Apps ans tools
