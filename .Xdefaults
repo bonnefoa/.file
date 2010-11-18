@@ -1,0 +1,9 @@
+*background: black
+*foreground: white
+
+*faceName: xft:Inconsolata:pixelsize=14
+*font: xft:Inconsolata:pixelsize=14
+
+*visualBell: on
+*saveLines: 16000
+

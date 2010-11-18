@@ -46,3 +46,12 @@
 [submodule ".vim/bundle/vim-L9"]
 	path = .vim/bundle/vim-L9
 	url = https://github.com/vim-scripts/L9.git
+[submodule ".vim/bundle/vim-searchcomplete"]
+	path = .vim/bundle/vim-searchcomplete
+	url = https://github.com/vim-scripts/SearchComplete.git
+[submodule ".vim/bundle/vim-taglist"]
+	path = .vim/bundle/vim-taglist
+	url = https://github.com/vim-scripts/taglist.vim.git
+[submodule ".vim/bundle/vim-repeat"]
+	path = .vim/bundle/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
