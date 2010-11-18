@@ -55,3 +55,6 @@
 [submodule ".vim/bundle/vim-repeat"]
 	path = .vim/bundle/vim-repeat
 	url = https://github.com/tpope/vim-repeat.git
+[submodule ".vim/bundle/vim-gundo"]
+	path = .vim/bundle/vim-gundo
+	url = https://github.com/vim-scripts/Gundo.git
