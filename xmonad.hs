@@ -26,6 +26,7 @@ main = do
       , logHook  = myLogHook xmobar
       , manageHook = myManageDocks <+> manageHook defaultConfig
       , startupHook = setWMName "LG3D"
+      , terminal = "urxvt"
       , layoutHook = smartBorders (avoidStruts  $  layoutHook defaultConfig)
       }
 
@@ -34,6 +35,8 @@ myLogHook xmobar = do
     dynamicLogWithPP $ xmobarPP 
                      { ppOutput = hPutStrLn xmobar
                      , ppTitle = xmobarColor "green" "" . shorten 50
+                     , ppSep = " | "
+                     , ppUrgent = xmobarColor "yellow" "red" . xmobarStrip
                      }
     fadeInactiveLogHook fadeAmount
     where fadeAmount = 0xdddddddd

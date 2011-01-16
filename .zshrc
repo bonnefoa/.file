@@ -101,14 +101,6 @@ then
   bindkey '[F'  end-of-line             # End
 fi
 
-# gnome-terminal
-if [ "$COLORTERM" = "gnome-terminal" ]
-then
-  # Correspondance touches-fonction spécifique
-  bindkey '^[OH'  beginning-of-line       # Home
-  bindkey '^[OF'  end-of-line             # End
-fi
-
 if [ -x /usr/bin/fortune ]; then 
 	/usr/bin/fortune 
 fi
@@ -284,4 +276,5 @@ stty ixany
 autoload -U compinit
 compinit
 
-export M2_HOME=/opt/maven/
+export TERM="rxvt-unicode"
+
