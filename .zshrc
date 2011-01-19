@@ -74,7 +74,10 @@ alias upgrade='yaourt -Syu'
 
 # Correspondance touches-fonction
 bindkey '^A'    beginning-of-line       # Home
+bindkey '[7~'    beginning-of-line       # Home
 bindkey '^E'    end-of-line             # End
+bindkey ''    kill-line             # End
+bindkey '[8~'    end-of-line             # End
 bindkey '^D'    delete-char             # Del
 bindkey '[3~' delete-char             # Del
 bindkey '[2~' overwrite-mode          # Insert
