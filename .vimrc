@@ -8,6 +8,8 @@ call pathogen#helptags()
 let mapleader = ","
 let g:mapleader = ","
 
+nmap <silent> <leader>s <Esc>:tabnew<CR><bar>:AckFromSearch<CR>
+
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
 
