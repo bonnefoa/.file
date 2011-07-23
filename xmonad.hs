@@ -41,14 +41,15 @@ main = do
 
 myLayout =
   smartBorders (avoidStruts  $
-    (tabbed |||  Grid ||| Accordion ||| layoutHook defaultConfig )
+    (layoutHook defaultConfig ||| Grid )
   )
   where tabbed = named "Tabbed" $ simpleTabbed
 
 myDmenu :: X ()
 myDmenu = do
   currentWorkspace <- fmap W.currentTag (gets windowset)
-  spawnOn currentWorkspace "exe=`dmenu_path | dmenu ` && eval \"exec $exe\""
+  spawnOn currentWorkspace "exe=`IFS=: ;lsx $PATH |sort -u| dmenu ` && eval \"exec $exe\""
+
 
 myStartupHook :: X ()
 myStartupHook = do
@@ -75,7 +76,7 @@ myManageDocks = manageDocks <+> (composeAll $
    ++ [title =? t --> doFloat | t <- []]
   )
 
-myKeys (config@XConfig {modMask = modm})= M.fromList $
+myKeys (XConfig {modMask = modm})= M.fromList $
      -- Apps ans tools
      [
        ((modm .|. shiftMask, xK_l ), spawn "xscreensaver-command --lock")
