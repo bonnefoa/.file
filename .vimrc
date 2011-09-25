@@ -1,14 +1,19 @@
-colorscheme desert
 
 filetype off 
 call pathogen#runtime_append_all_bundles()
 filetype plugin on
 call pathogen#helptags()
 
+" Enable syntax highlighting
+"let g:solarized_termcolors=256
+syntax enable
+colorscheme desert
+set background=dark
+
 let mapleader = ","
 let g:mapleader = ","
 
-nmap <silent> <leader>s <Esc>:tabnew<CR><bar>:AckFromSearch<CR>
+let NERDTreeIgnore=[ '\.cmi$' ,'\.cmx$' ,'\.o$' ,'\.annot$' ,'\~$']
 
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>sv :so $MYVIMRC<CR>
@@ -16,7 +21,16 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 " empty search
 nmap <silent> ,/ :nohlsearch<CR>
 
+nmap <silent> <leader>s <Esc>:tabnew<CR><bar>:AckFromSearch<CR>
+nnoremap <F6> viw"+p
+vnoremap <F6> "+p
+
+map <F5> "qdt,"sx"wdib"wP"sp"qp
+
 map <F10> <Esc>:tabnew<CR> 
+
+set wildmode=longest,list,full
+set wildmenu
 
 " Set 'nocompatible' to ward off unexpected things that your distro might
 " have made, as well as sanely reset options when re-sourcing .vimrc
@@ -25,8 +39,6 @@ set nocompatible
 " contents.  Use this to allow intelligent auto-indenting for each filetype
 " and for plugins that are filetype specific.
 filetype indent on
-" Enable syntax highlighting
-syntax on
 " One of the most important options to activate. Allows you to switch from an
 " unsaved buffer without saving it first. Also allows you to keep an undo
 " history for multiple files. Vim will complain if you try to quit without
@@ -85,7 +97,7 @@ set visualbell
 set t_vb=
 
 " Enable use of the mouse for all modes
-set mouse=a
+"set mouse=a
 
 " Set the command window height to 2 lines, to avoid many cases of having to
 " "press <Enter> to continue"
@@ -102,32 +114,74 @@ set pastetoggle=<F11>
 
 " Indentation settings for using 2 spaces instead of tabs.
 " Do not change 'tabstop' from its default value of 8 with this setup.
+set smartindent
+set tabstop=2
 set shiftwidth=2
-set softtabstop=2
 set expandtab
 
 let g:haddock_browser = "/usr/bin/firefox"
+let g:ackprg="ack-grep -r -H --nocolor --nogroup --column"
 
-"completeopt=menu,menuone,longest
+filetype plugin indent on
+
+let g:diffed_buffers=[]
+function DiffText(a, b, diffed_buffers)
+    enew
+    setlocal buftype=nowrite
+    call add(a:diffed_buffers, bufnr('%'))
+    call setline(1, split(a:a, "\n"))
+    diffthis
+    vnew
+    setlocal buftype=nowrite
+    call add(a:diffed_buffers, bufnr('%'))
+    call setline(1, split(a:b, "\n"))
+    diffthis
+endfunction
+function WipeOutDiffs(diffed_buffers)
+    for buffer in a:diffed_buffers
+        execute 'bwipeout! '.buffer
+    endfor
+endfunction
+" diff between buffers, use "ya and "yb
+nnoremap <special> <F7> :call DiffText(@a, @b, g:diffed_buffers)<CR>
+nnoremap <special> <F8> :call WipeOutDiffs(g:diffed_buffers)<CR>
+
+set diffopt+=iwhite
+
+" For folding 
+inoremap <F9> <C-O>za
+nnoremap <F9> za
+onoremap <F9> <C-C>za
+vnoremap <F9> zf
+
+set foldmethod=manual
 
 set tags=TAGS;$HOME
 
+" Automatically generate tags
+"au BufWritePost *.hs,*.lhs !hasktgs -R
 
-" Automatically generate tags 
-"au BufWritePost *.hs,*.lhs !hasktgs -R 
-
-function! UPDATE_TAGS()
+function! UPDATE_TAGS_OCAML()
   let _f_ = expand("%:p")
-  let _cmd_ = 'find . -name "*.hs" | xargs hasktags' 
-  let _sed_ = "sed -i \'/^(/d\' TAGS"
+  let _cmd_ = 'find . -name "*.ml" | xargs ctags58 -f tags_ml'
+  let _cmd_js_ = 'find . -name "*.js" | xargs ctags58 -f tags_js'
   let _list = system(_cmd_)
-  let _list2 = system(_sed_)
+  let _list2 = system(_cmd_js_)
   unlet _f_
   unlet _cmd_
-  unlet _sed_ 
   unlet _list
   unlet _list2
 endfunction
 
-autocmd BufWrite *.hs call UPDATE_TAGS()
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
 
+"autocmd BufWrite *.ml call UPDATE_TAGS_OCAML()
+autocmd BufWrite *.erl call UPDATE_TAGS('find . -name "*.erl" -o -name "*.hrl" | xargs etags')
+autocmd BufWrite *.* :call DeleteTrailingWS()
+set tabpagemax=200
+
+set expandtab
