@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 import Data.Ratio ((%))
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
@@ -20,6 +21,8 @@ import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ResizableTile
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Run(spawnPipe)
+import Data.Maybe
+import qualified XMonad.Util.ExtensibleState as XS
 
 data InitProgram = InitProgram WorkspaceId String
   deriving (Read, Show)
@@ -76,7 +79,41 @@ myManageDocks = manageDocks <+> (composeAll $
    ++ [title =? t --> doFloat | t <- []]
   )
 
-myKeys (XConfig {modMask = modm})= M.fromList $
+data OldWorkspace = OldWorkspace (M.Map ScreenId WorkspaceId) deriving Typeable
+instance ExtensionClass OldWorkspace where
+  initialValue = OldWorkspace M.empty
+
+myChangeWorkspace :: WorkspaceId -> X()
+myChangeWorkspace targetWorkspace = do
+  currentWorkspace <- fmap W.currentTag (gets windowset)
+  processChange currentWorkspace targetWorkspace
+
+getCurrentScreen :: X(ScreenId)
+getCurrentScreen = fmap (W.screen . W.current) (gets windowset)
+
+saveWsState :: X()
+saveWsState = do
+  currentWorkspace <- fmap W.currentTag (gets windowset)
+  currentScreen <- getCurrentScreen
+  OldWorkspace map <- XS.get
+  XS.put $ OldWorkspace $ M.insert currentScreen currentWorkspace map
+
+fetchAndSwapOldWs :: WorkspaceId ->  X()
+fetchAndSwapOldWs targetWorkspace = do
+  currentScreen <- getCurrentScreen
+  OldWorkspace oldMap <- XS.get
+  let newWorkspace = M.findWithDefault targetWorkspace currentScreen oldMap
+  windows $ W.greedyView newWorkspace
+
+processChange :: WorkspaceId -> WorkspaceId -> X()
+processChange currentWorkspace targetWorkspace
+  | currentWorkspace == targetWorkspace =
+    fetchAndSwapOldWs targetWorkspace
+  | otherwise = do
+    saveWsState
+    windows $ W.greedyView targetWorkspace
+
+myKeys conf@(XConfig {modMask = modm})= M.fromList $
      -- Apps ans tools
      [
        ((modm .|. shiftMask, xK_l ), spawn "xscreensaver-command --lock")
@@ -86,6 +123,11 @@ myKeys (XConfig {modMask = modm})= M.fromList $
      , ((modm, xK_BackSpace), spawn "suppr.sh")
      , ((modm, xK_p), myDmenu)
      ]
+    ++
+    [(
+        (modm, k), myChangeWorkspace i)
+          | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+    ]
 
 {-
  -readInitProgram :: IO([InitProgram])
