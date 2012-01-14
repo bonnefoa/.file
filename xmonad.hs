@@ -13,7 +13,6 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.Accordion
 import XMonad.Hooks.SetWMName
-import XMonad.Layout.Grid
 import XMonad.Layout.Named
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
@@ -44,7 +43,7 @@ main = do
 
 myLayout =
   smartBorders (avoidStruts  $
-    (layoutHook defaultConfig ||| Grid )
+    (layoutHook defaultConfig)
   )
   where tabbed = named "Tabbed" $ simpleTabbed
 
