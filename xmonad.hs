@@ -109,6 +109,7 @@ fetchAndSwapOldWs targetWorkspace = do
   currentScreen <- getCurrentScreen
   OldWorkspace oldMap <- XS.get
   let newWorkspace = M.findWithDefault targetWorkspace currentScreen oldMap
+  saveWsState
   windows $ W.greedyView newWorkspace
 
 processChange :: WorkspaceId -> WorkspaceId -> X()
