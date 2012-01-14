@@ -20,6 +20,7 @@ import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ResizableTile
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Run(spawnPipe)
+import XMonad.Hooks.UrgencyHook
 import Data.Maybe
 import qualified XMonad.Util.ExtensibleState as XS
 
@@ -28,7 +29,7 @@ data InitProgram = InitProgram WorkspaceId String
 
 main = do
     xmobar <- spawnPipe "/usr/bin/xmobar"
-    xmonad $ defaultConfig
+    xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
       {  modMask=mod4Mask
       , normalBorderColor="#ffffff"
       , focusedBorderColor="#9492F"
