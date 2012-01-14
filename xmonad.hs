@@ -115,7 +115,7 @@ processChange currentWorkspace targetWorkspace
 myKeys conf@(XConfig {modMask = modm})= M.fromList $
      -- Apps ans tools
      [
-       ((modm .|. shiftMask, xK_l ), spawn "xscreensaver-command --lock")
+       ((modm .|. shiftMask, xK_l ), spawn "xlock")
      , ((modm, xK_Left), spawn "mpc prev")
      , ((modm, xK_Down), spawn "mpc toggle")
      , ((modm, xK_Right), spawn "mpc next")
