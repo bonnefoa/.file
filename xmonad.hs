@@ -24,6 +24,15 @@ import XMonad.Hooks.UrgencyHook
 import Data.Maybe
 import qualified XMonad.Util.ExtensibleState as XS
 
+import XMonad.Util.Dmenu
+import Control.Arrow((>>>))
+import Control.Monad
+import System.FilePath
+import System.Posix.Files
+import Data.String
+import System.Directory
+import Data.List
+
 data InitProgram = InitProgram WorkspaceId String
   deriving (Read, Show)
 
@@ -55,9 +64,10 @@ myLayout =
 
 myDmenu :: X ()
 myDmenu = do
+  files <- liftIO getListExecutables
   currentWorkspace <- fmap W.currentTag (gets windowset)
-  spawnOn currentWorkspace "exe=`IFS=: ;lsx $PATH |sort -u| dmenu ` && eval \"exec $exe\""
-
+  res <- dmenu files
+  spawnOn currentWorkspace res
 
 myStartupHook :: X ()
 myStartupHook = do
@@ -142,4 +152,43 @@ myKeys conf@(XConfig {modMask = modm})= M.fromList $
  -  strInitProgram <- readFile "initProgram.conf"
  -  return $ read strInitProgram
  -}
+
+filterUniq :: [FilePath] -> [FilePath]
+filterUniq (x : y : xs)
+  | x == y = filterUniq (y:xs)
+  | otherwise = x : filterUniq (y:xs)
+filterUniq res = res
+
+getAbsFilesInDir :: FilePath -> IO([FilePath])
+getAbsFilesInDir fp = do
+  contents <- fmap (\\ [".", ".."]) (getDirectoryContents fp)
+  return $ map (\a -> joinPath [fp, a]) contents
+
+getFilesInPath :: IO([FilePath])
+getFilesInPath = getSearchPath
+  >>= mapM getAbsFilesInDir
+  >>= (concat >>> return)
+
+isSymlinkExecutable :: FilePath -> IO Bool
+isSymlinkExecutable fp = do
+  li <- readSymbolicLink fp
+  let fullPath = joinPath [root, li]
+  isFileExit <- fileExist fullPath
+  if isFileExit
+    then fileAccess fullPath False False True
+    else return False
+  where root = dropFileName fp
+
+isFileExecutable :: FilePath -> IO Bool
+isFileExecutable fp = do
+  fs <- getSymbolicLinkStatus fp
+  if isSymbolicLink fs
+    then isSymlinkExecutable fp
+    else fileAccess fp False False True
+
+getListExecutables :: IO([FilePath])
+getListExecutables =
+  getFilesInPath
+  >>= filterM isFileExecutable
+  >>= return . filterUniq . sort . (map takeFileName)
 
