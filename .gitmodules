@@ -49,3 +49,9 @@
 [submodule ".vim/bundle/tabular"]
 	path = .vim/bundle/tabular
 	url = https://github.com/godlygeek/tabular.git
+[submodule ".vim/bundle/minibufexpl"]
+	path = .vim/bundle/minibufexpl
+	url = https://github.com/fholgado/minibufexpl.vim.git
+[submodule ".vim/bundle/vim-fuzzyfind"]
+	path = .vim/bundle/vim-fuzzyfind
+	url = https://github.com/vim-scripts/FuzzyFinder.git
