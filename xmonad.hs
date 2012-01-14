@@ -35,12 +35,17 @@ main = do
       , focusedBorderColor="#9492F"
       , borderWidth = 1
       , keys = \c -> myKeys c `M.union` keys defaultConfig c
-      , logHook = myLogHook xmobar >>= \_ -> takeTopFocus
-      , manageHook = manageSpawn <+> myManageDocks <+> manageHook defaultConfig
+      , logHook = myLogHook xmobar
+      , manageHook = myManageHook
       , terminal = "urxvt"
       , layoutHook = myLayout
       , startupHook = myStartupHook
       }
+
+myManageHook :: ManageHook
+myManageHook = do
+  doF W.focusDown <+> doFullFloat
+  manageSpawn <+> myManageDocks <+> manageHook defaultConfig
 
 myLayout =
   smartBorders (avoidStruts  $
@@ -71,6 +76,7 @@ myLogHook xmobar = do
                      , ppUrgent = xmobarColor "yellow" "red" . xmobarStrip
                      }
     fadeInactiveLogHook fadeAmount
+    takeTopFocus
     where fadeAmount = 0xdddddddd
 
 myManageDocks = manageDocks <+> (composeAll $
