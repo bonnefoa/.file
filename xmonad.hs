@@ -8,7 +8,6 @@ import XMonad
 import XMonad.Actions.SpawnOn
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
-import XMonad.Hooks.ICCCMFocus
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.Accordion
@@ -37,7 +36,7 @@ data InitProgram = InitProgram WorkspaceId String
   deriving (Read, Show)
 
 main = do
-    xmobar <- spawnPipe "/usr/bin/xmobar"
+    xmobar <- spawnPipe "xmobar"
     xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
       {  modMask=mod4Mask
       , normalBorderColor="#ffffff"
@@ -53,14 +52,16 @@ main = do
 
 myManageHook :: ManageHook
 myManageHook = do
+  a <- liftX (fmap (W.visible >>> head >>> W.workspace >>> W.tag) (gets windowset))
   doF W.focusDown <+> doFullFloat
-  manageSpawn <+> myManageDocks <+> manageHook defaultConfig
+  manageSpawn
+    <+> myManageDocks
+    <+> manageHook defaultConfig
+    <+> composeAll [ title =? "soragl" --> doShift a ]
 
-myLayout =
-  smartBorders (avoidStruts  $
+myLayout = smartBorders (avoidStruts  $
     (layoutHook defaultConfig)
   )
-  where tabbed = named "Tabbed" $ simpleTabbed
 
 myDmenu :: X ()
 myDmenu = do
@@ -72,10 +73,6 @@ myDmenu = do
 myStartupHook :: X ()
 myStartupHook = do
     setWMName "LG3D"
-    {-
-     -listInitProgram <- liftIO readInitProgram
-     -mapM_ (\(InitProgram wid prg) -> spawnOn wid prg) listInitProgram
-     -}
 
 myLogHook :: Handle -> X ()
 myLogHook xmobar = do
@@ -86,7 +83,6 @@ myLogHook xmobar = do
                      , ppUrgent = xmobarColor "yellow" "red" . xmobarStrip
                      }
     fadeInactiveLogHook fadeAmount
-    takeTopFocus
     where fadeAmount = 0xdddddddd
 
 myManageDocks = manageDocks <+> (composeAll $
@@ -133,11 +129,11 @@ processChange currentWorkspace targetWorkspace
 myKeys conf@(XConfig {modMask = modm})= M.fromList $
      -- Apps ans tools
      [
-       ((modm .|. shiftMask, xK_l ), spawn "xlock")
-     , ((modm, xK_Left), spawn "mpc prev")
+     ((modm, xK_Left), spawn "mpc prev")
      , ((modm, xK_Down), spawn "mpc toggle")
      , ((modm, xK_Right), spawn "mpc next")
      , ((modm, xK_BackSpace), spawn "suppr.sh")
+     , ((modm, xK_Up), spawn "copy.sh")
      , ((modm, xK_p), myDmenu)
      ]
     ++
