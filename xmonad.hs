@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+import Data.Maybe
 import Data.Ratio ((%))
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
@@ -50,14 +51,19 @@ main = do
       , startupHook = myStartupHook
       }
 
+fetchBestOpenglTag :: W.StackSet i l a sid sd -> i
+fetchBestOpenglTag ss = fromMaybe focus mbVisible
+    where mbVisible = fmap (W.tag . W.workspace) (listToMaybe $ W.visible ss)
+          focus = (W.tag . W.workspace) (W.current ss)
+
 myManageHook :: ManageHook
 myManageHook = do
-  a <- liftX (fmap (W.visible >>> head >>> W.workspace >>> W.tag) (gets windowset))
+  openglTag <- liftX (fmap fetchBestOpenglTag (gets windowset))
   doF W.focusDown <+> doFullFloat
   manageSpawn
     <+> myManageDocks
     <+> manageHook defaultConfig
-    <+> composeAll [ title =? "soragl" --> doShift a ]
+    <+> composeAll [ title =? "soragl" --> doShift openglTag ]
 
 myLayout = smartBorders (avoidStruts  $
     (layoutHook defaultConfig)
