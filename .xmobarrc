@@ -5,7 +5,12 @@ Config {  font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
        , border = NoBorder
        , position = Top
        , commands = [
-                      Run MPD ["-t", "<state>: <artist> - <title>"] 10
+                    Run BatteryP ["BAT0"] ["-t", "<acstatus>"
+                            , "-L", "10", "-H", "80"
+                            , "-l", "red", "-h", "green"
+                            , "--", "-O", "Charging", "-o", "Battery: <left>%"
+                            ] 10
+                    , Run MPD ["-t", "<state>: <artist> - <title>"] 10
                     , Run Network "wlan0" ["-L","0","-H","32","--normal","aquamarine2","--high","chocolate1"] 40
                     , Run Cpu ["-L","15","-H","50","--normal","aquamarine2","--high","chocolate1"] 40
                     , Run Memory ["-t","Mem: <usedratio>%"] 40
@@ -18,5 +23,5 @@ Config {  font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
        , persistent = True
        , lowerOnStart = True
        , hideOnStart = False
-       , template = "%StdinReader% } { [%mpd%] [%wlan0%] | [%cpu%] | [%memory%] | <fc=DarkSlateGray3>[ %date% ] | </fc><fc=aquamarine2,black>[ %time% ]</fc>"
+       , template = "%StdinReader% } { [%mpd%] [%battery%] [%wlan0%] | [%cpu%] | [%memory%] | <fc=DarkSlateGray3>[ %date% ] | </fc><fc=aquamarine2,black>[ %time% ]</fc>"
        }
