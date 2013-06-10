@@ -1,5 +1,4 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-import Data.Maybe
 import Data.Ratio ((%))
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
@@ -23,6 +22,8 @@ import XMonad.Util.Run(spawnPipe)
 import XMonad.Hooks.UrgencyHook
 import Data.Maybe
 import qualified XMonad.Util.ExtensibleState as XS
+import XMonad.Util.Paste
+import Graphics.X11.ExtraTypes.XF86
 
 import XMonad.Util.Dmenu
 import Control.Arrow((>>>))
@@ -51,19 +52,10 @@ main = do
       , startupHook = myStartupHook
       }
 
-fetchBestOpenglTag :: W.StackSet i l a sid sd -> i
-fetchBestOpenglTag ss = fromMaybe focus mbVisible
-    where mbVisible = fmap (W.tag . W.workspace) (listToMaybe $ W.visible ss)
-          focus = (W.tag . W.workspace) (W.current ss)
-
 myManageHook :: ManageHook
 myManageHook = do
-  openglTag <- liftX (fmap fetchBestOpenglTag (gets windowset))
   doF W.focusDown <+> doFullFloat
-  manageSpawn
-    <+> myManageDocks
-    <+> manageHook defaultConfig
-    <+> composeAll [ title =? "soragl" --> doShift openglTag ]
+  manageSpawn <+> myManageDocks <+> manageHook defaultConfig
 
 myLayout = smartBorders (avoidStruts  $
     (layoutHook defaultConfig)
@@ -95,6 +87,7 @@ myManageDocks = manageDocks <+> (composeAll $
 -- Allows focusing other monitors without killing the fullscreen
    [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
    ++ [title =? t --> doFloat | t <- []]
+   ++ [ className =? "mplayer2"  --> doFloat ]
   )
 
 data OldWorkspace = OldWorkspace (M.Map ScreenId WorkspaceId) deriving Typeable
@@ -132,6 +125,22 @@ processChange currentWorkspace targetWorkspace
     saveWsState
     windows $ W.greedyView targetWorkspace
 
+
+sendKey keysym = withDisplay $ \d -> do
+  keycode <- io $ keysymToKeycode d keysym
+  root <- asks theRoot
+  let subw = none
+  withFocused $ \w -> do
+    io $ allocaXEvent $ \ev -> do
+                        setEventType ev keyPress
+                        setKeyEvent ev w root subw noModMask keycode True
+                        sendEvent d w False noEventMask ev
+    io $ allocaXEvent $ \ev -> do
+                        setEventType ev keyRelease
+                        setKeyEvent ev w root subw noModMask keycode True
+                        sendEvent d w False noEventMask ev
+    return ()
+
 myKeys conf@(XConfig {modMask = modm})= M.fromList $
      -- Apps ans tools
      [
@@ -140,20 +149,17 @@ myKeys conf@(XConfig {modMask = modm})= M.fromList $
      , ((modm, xK_Right), spawn "mpc next")
      , ((modm, xK_BackSpace), spawn "suppr.sh")
      , ((modm, xK_Up), spawn "copy.sh")
-     , ((modm, xK_p), myDmenu)
+     , ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle")
+     , ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 5+")
+     , ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 5-")
+     , ((noModMask, xF86XK_MonBrightnessUp), spawn "xbacklight -inc +10")
+     , ((noModMask, xF86XK_MonBrightnessDown), spawn "xbacklight -inc -10")
      ]
     ++
     [(
         (modm, k), myChangeWorkspace i)
           | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
     ]
-
-{-
- -readInitProgram :: IO([InitProgram])
- -readInitProgram = do
- -  strInitProgram <- readFile "initProgram.conf"
- -  return $ read strInitProgram
- -}
 
 filterUniq :: [FilePath] -> [FilePath]
 filterUniq (x : y : xs)
@@ -193,4 +199,3 @@ getListExecutables =
   getFilesInPath
   >>= filterM isFileExecutable
   >>= return . filterUniq . sort . (map takeFileName)
-
