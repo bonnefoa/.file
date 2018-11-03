@@ -1,3 +1,3 @@
 cp xmonad.hs ~/.xmonad/
-cp -r .vim* ~/
-
+ln -s .vimrc ~/.vimrc
+ln -s zshrc/zshrc ~/.zshrc
