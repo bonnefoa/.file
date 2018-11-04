@@ -1,7 +1,5 @@
-#export ZSH=$HOME/.oh-my-zsh
 export ZPLUG_HOME=$HOME/git-repos/zplug
 
-ZSH_THEME="gentoo"
 # Machine specific configuration files
 if [ -d $HOME/.zsh_conf ]; then
 	for file in $HOME/.zsh_conf/*.zsh; do
@@ -16,7 +14,6 @@ if [ -d $HOME/git-repos/.file/zshrc/ ]; then
 	done
 fi
 
-#source $ZSH/oh-my-zsh.sh
 source $ZPLUG_HOME/init.zsh
 
 zplug "plugins/kubectl", from:oh-my-zsh

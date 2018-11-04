@@ -76,7 +76,7 @@ nmap <silent> <leader>/ :nohlsearch<CR>
 
 " Fzf bindings
 nnoremap <silent> <Leader>l  :Lines<CR>
-nnoremap <silent> <Leader>   :Files<CR>
+nnoremap <silent> <Leader>p  :Files<CR>
 nnoremap <silent> <Leader>b  :Buffers<CR>
 nnoremap <silent> <Leader>`  :Marks<CR>
 nnoremap <silent> <Leader>B  :History<CR>
@@ -92,6 +92,7 @@ endfunction
 nmap <leader>] :cn<cr>
 nmap <leader>[ :cp<cr>
 nmap <leader>g :YcmCompleter GoToDefinition<cr>
+nnoremap <leader>cd :cd %:p:h<CR>
 
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -148,6 +149,7 @@ set shiftwidth=4
 
 let g:gutentags_dont_load=0
 let g:gutentags_ctags_exclude = ['*.sql', 'parts', 'eggs', 'build', 'node_modules']
+let g:gutentags_exclude_project_root = ['/usr/local', '/home/sora']
 
 func! DeleteTrailingWS()
     exe "normal mz"
