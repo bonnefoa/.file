@@ -14,3 +14,8 @@ export LC_ALL="en_US.UTF-8"
 export FZF_COMPLETION_OPTS='+c -x'
 export AWS_SESSION_TTL=24h
 export AWS_ASSUME_ROLE_TTL=1h
+
+# Define LS_COLORS
+if [[ -d $ZPLUG_HOME/repos/seebi/dircolors-solarized/ ]]; then
+    eval $(dircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.256dark)
+fi

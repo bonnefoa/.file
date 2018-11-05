@@ -22,6 +22,7 @@ zplug "plugins/git", from:oh-my-zsh
 zplug "themes/gentoo", from:oh-my-zsh
 zplug "~/git-repos/.file/zplug/kube", from:local, defer:3
 zplug "~/git-repos/.file/zplug/linux", from:local, if:"[[ $OSTYPE == *linux* ]]" 
+zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *mac* ]]" 
 zplug "seebi/dircolors-solarized"
 zplug "changyuheng/fz", defer:1
 zplug "rupa/z", use:z.sh
