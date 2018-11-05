@@ -146,7 +146,7 @@ set notimeout ttimeout ttimeoutlen=200
 set smartindent
 set tabstop=4
 set shiftwidth=4
-"set expandtab
+set expandtab
 
 let g:gutentags_dont_load=0
 let g:gutentags_ctags_exclude = ['*.sql', 'parts', 'eggs', 'build', 'node_modules']
