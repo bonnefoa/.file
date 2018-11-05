@@ -1,5 +1,4 @@
 export EDITOR=vim
-export TERM=rxvt-unicode-256color
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude ".git" . "$1" "
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude ".git" . "$1" "
