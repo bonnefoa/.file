@@ -1,5 +1,5 @@
 export EDITOR=vim
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" '
 export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude ".git" . "$1" "
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude ".git" . "$1" "
 
@@ -19,3 +19,4 @@ export AWS_ASSUME_ROLE_TTL=1h
 if [[ -d $ZPLUG_HOME/repos/seebi/dircolors-solarized/ ]]; then
     eval $(dircolors $ZPLUG_HOME/repos/seebi/dircolors-solarized/dircolors.256dark)
 fi
+

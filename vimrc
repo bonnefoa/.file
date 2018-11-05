@@ -82,6 +82,9 @@ nnoremap <silent> <Leader>`  :Marks<CR>
 nnoremap <silent> <Leader>B  :History<CR>
 nnoremap <silent> <Leader>S  :call RgFromSearch()<CR>
 
+" RipGrep
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+set grepprg=rg\ --vimgrep
 function! RgFromSearch()
   let search =  getreg('/')
   " translate vim regular expression to perl regular expression.
