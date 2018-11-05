@@ -16,7 +16,6 @@ fi
 
 source $ZPLUG_HOME/init.zsh
 
-zplug "plugins/kubectl", from:oh-my-zsh
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "plugins/git", from:oh-my-zsh
 zplug "themes/gentoo", from:oh-my-zsh
@@ -26,6 +25,9 @@ zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *mac* ]]"
 zplug "seebi/dircolors-solarized"
 zplug "changyuheng/fz", defer:1
 zplug "rupa/z", use:z.sh
+
+zplug "plugins/kubectl", from:oh-my-zsh, defer:2
+zplug "~/git-repos/kubectl-fzf", from:local, defer:3
 
 ulimit -n 4096
 

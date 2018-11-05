@@ -3,7 +3,3 @@ if [ -d ~/git-repos/kube-ps1/ ]; then
     KUBE_PS1_SYMBOL_ENABLE=false
     PROMPT='$(kube_ps1)'$PROMPT
 fi
-
-if [ -d ~/git-repos/kubectl-fzf/ ]; then
-    source ~/git-repos/kubectl-fzf/kubectl_fzf.plugin.zsh
-fi
