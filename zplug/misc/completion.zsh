@@ -64,6 +64,6 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
         named netdump news nfsnobody nobody nscd ntp nut nx obsrun openvpn \
         operator pcap polkitd postfix postgres privoxy pulse pvm quagga radvd \
         rpc rpcuser rpm rtkit scard shutdown squid sshd statd svn sync tftp \
-        usbmux uucp vcsa wwwrun xfs cron mongodb nullmail portage redis \
+        usbmux uucp vcsa wwwrun xfs cron mongodb nullmail portage redis git \
         shoutcast tcpdump cloakproxy '_*'
 zstyle ':completion:*' single-ignored show

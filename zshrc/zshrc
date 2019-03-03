@@ -1,32 +1,22 @@
 export ZPLUG_HOME=$HOME/git-repos/zplug
-
-# Machine specific configuration files
-if [ -d $HOME/.zsh_conf ]; then
-	for file in $HOME/.zsh_conf/*.zsh; do
-		source $file
-	done
-fi
-
-# Common configuration files
-if [ -d $HOME/git-repos/.file/zshrc/ ]; then
-	for file in $HOME/git-repos/.file/zshrc/*.zsh; do
-		source $file
-	done
-fi
-
-# Completion files
-if [ -d $HOME/git-repos/.file/zshrc/completion ]; then
-    fpath=($HOME/git-repos/.file/zshrc/completion $fpath)
-fi
+export GOROOT=/usr/lib/go/
 
 source $ZPLUG_HOME/init.zsh
 
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/docker", from:oh-my-zsh
+#
+# Machine specific configuration files
+if [ -d $HOME/.zsh_conf ]; then
+    zplug "$HOME/.zsh_conf", from:local
+fi
+zplug "~/git-repos/.file/zplug/misc", from:local
+zplug "~/git-repos/.file/zplug/theme", from:local, as:theme
 zplug "~/git-repos/.file/zplug/kube", from:local, defer:3
 zplug "~/git-repos/.file/zplug/linux", from:local, if:"[[ $OSTYPE == *linux* ]]"
 zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *darwin* ]]"
+
 zplug "seebi/dircolors-solarized"
 zplug "changyuheng/fz", defer:1
 zplug "rupa/z", use:z.sh
