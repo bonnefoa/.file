@@ -11,12 +11,12 @@ _fzf_compgen_dir() {
     fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
-zstyle ':completion:*' menu select
-
 export LESS=" -S -R"
 export GOPATH="$HOME/git-repos/golang/"
 export FZF_BASE="$GOPATH/src/github.com/junegunn/fzf"
 export RIPGREP_CONFIG_PATH="$HOME/git-repos/.file/ripgreprc"
+
+export PATH="$HOME/git-repos/.file/bin/:$PATH"
 
 export PYTHONDONTWRITEBYTECODE="1"
 export LANG="en_US.utf8"

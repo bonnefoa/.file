@@ -5,6 +5,7 @@ set exrc
 set rtp+=~/.vim/bundle/vundle/
 call vundle#begin()
 
+Bundle 'fatih/vim-go'
 Bundle 'gmarik/vundle'
 Bundle 'SirVer/ultisnips'
 Bundle 'honza/vim-snippets'
@@ -18,21 +19,22 @@ Bundle 'tpope/vim-git.git'
 Bundle 'tpope/vim-repeat.git'
 Bundle 'tpope/vim-surround.git'
 Bundle 'tpope/vim-dispatch.git'
-Bundle 'Valloric/YouCompleteMe.git'
+" Bundle 'Valloric/YouCompleteMe.git'
 Bundle 'vim-scripts/matchit.zip'
 Bundle 'altercation/vim-colors-solarized'
-Bundle 'kana/vim-altr'
-Bundle 'rhysd/vim-clang-format'
 Bundle 'hynek/vim-python-pep8-indent'
 Bundle 'ludovicchabant/vim-gutentags'
-Bundle 'majutsushi/tagbar'
-Bundle 'fatih/vim-go'
-Bundle 'ngmy/vim-rubocop'
-Bundle 'JamshedVesuna/vim-markdown-preview'
-Bundle 'hashivim/vim-terraform'
-Bundle 'vim-scripts/mako.vim'
 Bundle 'junegunn/fzf'
 Bundle 'junegunn/fzf.vim'
+Bundle 'dag/vim-fish'
+Bundle 'kburdett/vim-nuuid.git'
+"Bundle 'majutsushi/tagbar'
+"Bundle 'ngmy/vim-rubocop'
+"Bundle 'JamshedVesuna/vim-markdown-preview'
+"Bundle 'hashivim/vim-terraform'
+"Bundle 'vim-scripts/mako.vim'
+"Bundle 'kana/vim-altr'
+"Bundle 'rhysd/vim-clang-format'
 
 call vundle#end()
 
@@ -46,13 +48,15 @@ syntax on
 set background=dark
 colorscheme solarized
 
-let mapleader = ","
-let g:mapleader = ","
+let mapleader = ','
+let g:mapleader = ','
 let maplocalleader = ','
 let g:maplocalleader = ','
 
+let g:syntastic_vim_checkers = ['vint']
 let g:syntastic_go_checkers = ['govet', 'errcheck', 'go', 'golint']
 let g:syntastic_python_checkers=['flake8']
+let g:syntastic_json_checkers=['jsonlint']
 let g:syntastic_ruby_checkers=['mri', 'rubocop']
 let g:syntastic_python_flake8_args='--ignore=E501,E225'
 let g:syntastic_always_populate_loc_list = 1
@@ -70,7 +74,7 @@ nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>so :so $MYVIMRC<CR>
 
 
-let g:UltiSnipsExpandTrigger="<leader>s"
+let g:UltiSnipsExpandTrigger='<leader>s'
 " empty search
 nmap <silent> <leader>/ :nohlsearch<CR>
 
@@ -78,6 +82,7 @@ nmap <silent> <leader>/ :nohlsearch<CR>
 nnoremap <silent> <Leader>l  :Rg<CR>
 nnoremap <silent> <Leader>p  :Files<CR>
 nnoremap <silent> <Leader>b  :Buffers<CR>
+nnoremap <silent> <Leader>t  :Tags<CR>
 nnoremap <silent> <Leader>`  :Marks<CR>
 nnoremap <silent> <Leader>B  :History<CR>
 nnoremap <silent> <Leader>S  :call RgFromSearch()<CR>
@@ -89,6 +94,13 @@ function! RgFromSearch()
   let search = substitute(search,'\(\\<\|\\>\)','\\b','g')
   exec 'Rg ' . search
 endfunction
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 
 nmap <leader>] :cn<cr>
 nmap <leader>[ :cp<cr>
@@ -153,9 +165,9 @@ let g:gutentags_ctags_exclude = ['*.sql', 'parts', 'eggs', 'build', 'node_module
 let g:gutentags_exclude_project_root = ['/usr/local', '/home/sora']
 
 func! DeleteTrailingWS()
-    exe "normal mz"
+    exe 'normal mz'
     %s/\s\+$//ge
-    exe "normal `z"
+    exe 'normal `z'
 endfunc
 
 autocmd BufWrite *.* call DeleteTrailingWS()
@@ -173,17 +185,17 @@ fun! ReadMan()
   " Assign current word under cursor to a script variable:
   let s:man_word = expand('<cword>')
   " Open a new window:
-  :exe ":Sscratch"
+  :exe ':Sscratch'
   " delete everything
-  :exe ":1,$d"
+  :exe ':1,$d'
   " Read in the manpage for man_word (col -b is for formatting):
-  :exe ":r!man 3 " . s:man_word . " | col -b"
+  :exe ':r!man 3 ' . s:man_word . ' | col -b'
   " Goto first line...
-  :exe ":goto"
+  :exe ':goto'
   " and delete it:
-  :exe ":delete"
+  :exe ':delete'
   " finally set file type to 'man':
-  :exe ":set filetype=man"
+  :exe ':set filetype=man'
 endfun
 " Map the K key to the ReadMan function:
 map K :call ReadMan()<CR>
@@ -195,7 +207,10 @@ let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 0
 let g:ycm_always_populate_location_list = 1
+"let g:go_auto_type_info = 1
 "let g:ycm_python_binary_path = 'python'
+let g:ycm_gocode_binary_path = "$GOPATH/bin/gocode-gomod"
+let g:ycm_godef_binary_path = "$GOPATH/bin/godef"
 
 :autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
 :autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
