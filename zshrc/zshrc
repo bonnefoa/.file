@@ -14,11 +14,16 @@ if [ -d $HOME/git-repos/.file/zshrc/ ]; then
 	done
 fi
 
+# Completion files
+if [ -d $HOME/git-repos/.file/zshrc/completion ]; then
+    fpath=($HOME/git-repos/.file/zshrc/completion $fpath)
+fi
+
 source $ZPLUG_HOME/init.zsh
 
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "plugins/git", from:oh-my-zsh
-zplug "themes/gentoo", from:oh-my-zsh
+zplug "plugins/docker", from:oh-my-zsh
 zplug "~/git-repos/.file/zplug/kube", from:local, defer:3
 zplug "~/git-repos/.file/zplug/linux", from:local, if:"[[ $OSTYPE == *linux* ]]"
 zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *darwin* ]]"
