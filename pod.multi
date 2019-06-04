@@ -1,0 +1,110 @@
+#!/bin/bash
+
+# config
+tmux_session_name="multi-pod"
+MAX=20
+NEW_WINDOW=0
+
+usage() {
+    echo $1
+    echo
+    echo 'pod.multi: [OPTION]'
+    echo 'Creates a tmux session with synchronised panes across multiple pods'
+    echo
+    echo 'Options: '
+    echo '  -d <list of pods>: List '
+    echo '  -r <app>: App to open. Instances are sorted by pod ids'
+    echo '  -m <max>: Maximum number of pane or window to open. Default is 20'
+    echo '  -w: Open window instead of pane'
+    echo
+    echo 'Examples: '
+    echo '   -d "pod1 pod2 pod3 ... podN"  : list pods to connect to'
+    echo '   -r haproxy: Connect to the 20 first pods'
+    exit 0
+}
+
+pods_by_app ()
+{
+    kubectl get pod -l app="$1" --all-namespaces -o=jsonpath='{range .items[*]}{.metadata.namespace};{.metadata.name}{" "}{end}'
+}
+
+starttmux() {
+    local session_name="$1"
+    local pods=()
+    compteur=0
+    LST=$(echo ${PODS} | sed -n 1'p' | tr ' ' '\n')
+    for i in ${LST}
+    do
+        ((compteur++))
+        if [[ "$compteur" -gt "$MAX" ]]; then
+            break
+        fi
+        pods+=("$i")
+    done
+    local windowname=$session_name
+
+    IFS=';' read -r -a pod_arr <<< "${pods[0]}"
+    tmux -u new-session -d -s "$session_name" -n "${windowname}" "kubectl exec -ti ${pod_arr[1]} -n ${pod_arr[0]} bash"
+    unset pods[0];
+    local index=2
+    echo "${pods[@]}"
+    for i in "${pods[@]}"
+    do
+        IFS=';' read -r -a pod_arr <<< "${i}"
+        if [[ "$NEW_WINDOW" -eq 1 ]]; then
+            tmux new-window -t "${session_name}:$index" "kubectl exec -ti ${pod_arr[1]} -n ${pod_arr[0]} bash"
+            ((index+=1))
+        else
+            tmux split-window -t :"${windowname}" -h "kubectl exec -ti ${pod_arr[1]} -n ${pod_arr[0]} bash"
+            tmux select-layout -t :"${windowname}" tiled > /dev/null
+        fi
+    done
+    if [[ "$NEW_WINDOW" -eq 0 ]]; then
+        tmux select-pane -t 0
+        tmux set-window-option -t :"${windowname}"  synchronize-panes on > /dev/null
+    fi
+}
+
+checkopt() {
+    if [ -z "$PODS" ]; then
+        usage "Please provide of list of pods with -d option."
+    fi
+    local host_title=$(echo $PODS | tr " ." "_")
+    tmux_session_name="${tmux_session_name}_${host_title}"
+    tmux_session_name="${tmux_session_name:0:32}"
+    if [ -z "$TMUX" ]; then # if not in a tmux session create one
+
+    # check that there is not an other session with same name
+    compteur=0
+    for session in $(tmux ls | awk '{print substr($1, 1, length($1)-1)}')
+    do
+        ((compteur++))
+        if [ "$session" = "$tmux_session_name" ]; then
+        tmux_session_name=$tmux_session_name"_"$compteur
+        fi
+    done
+    fi
+    starttmux "$tmux_session_name"
+    tmux a -dt "$tmux_session_name"
+}
+
+while getopts "u:d:r:m:hw" o; do
+        case "${o}" in
+        h)
+            usage
+            ;;
+        w)
+            NEW_WINDOW=1
+            ;;
+        m)
+            MAX=${OPTARG}
+            ;;
+        d)
+            PODS=${OPTARG}
+            ;;
+        r)
+            PODS=$(pods_by_app ${OPTARG} | paste -sd " " -)
+            ;;
+        esac
+done
+checkopt
