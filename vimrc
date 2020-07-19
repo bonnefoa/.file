@@ -2,7 +2,7 @@ set nocompatible
 filetype off
 
 set exrc
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
 
 Bundle 'fatih/vim-go'
