@@ -43,6 +43,15 @@
 @define-color warning #ebcb8b;
 @define-color critical #d08770;
 
+@define-color one  #d8dee9;
+@define-color two #4c566a;
+@define-color three #88c0d0;
+@define-color four #434c5e;
+@define-color five #5e81ac;
+@define-color six #2e3440;
+@define-color seven #eceff4;
+@define-color eigth #5e81ac;
+
 /* Reset all styles */
 * {
     border: none;
@@ -54,8 +63,6 @@
 
 /* The whole bar */
 #waybar {
-    /*background: #2e3440;*/
-    /*background: rgba(46, 52, 64, 0.8);*/
     background: transparent;
     color: #eceff4;
     font-family: FiraCode, Noto Sans;
@@ -67,6 +74,8 @@
 #battery,
 #clock,
 #cpu,
+#custom-spotifyd,
+#idle_inhibitor,
 #memory,
 #mode,
 #network,
@@ -153,46 +162,57 @@
     margin-left: 40px;
 }
 
+#pulseaudio {
+    background: @eigth;
+    color: @light
+}
+
 #network {
-    background: #4c566a;
+    background: @two;
     color: @light;
 }
 
+#network.network2 {
+    background: @three;
+    color: @dark;
+}
+
 #memory {
-    background: #88c0d0;
+    background: @four;
+    color: @light;
+}
+
+#idle_inhibitor {
+    background: @one;
     color: @dark;
 }
 
 #cpu {
-    background: #434c5e;
-    color: @light;
+    background: @five;
+    color: @dark;
 }
 
 #temperature {
-    background: #d8dee9;
-    color: @dark;
+    background: @six;
+    color: @light;
 }
 
 #battery {
-    background: #5e81ac;
-    color: @light;
-}
-
-#tray {
-    background: #2e3440;
-}
-
-#clock.date {
-    background: #2e3440;
-    color: @light;
-}
-
-#clock.time {
-    background: #eceff4;
+    background: @seven;
     color: @dark;
 }
 
-#pulseaudio { /* Unsused but kept for those who needs it */
+#clock.date {
+    background: @eigth;
+    color: @ligth;
+}
+
+#clock.time {
+    background: @one;
+    color: @dark;
+}
+
+#custom-spotifyd {
     background: #d8dee9;
     color: @dark
 }
@@ -203,50 +223,62 @@
 
 #custom-arrow1 {
     font-size: 17px;
-    color: #d8dee9;
+    color: @one;
     background: transparent;
+}
+
+#custom-arrowIdle {
+    font-size: 17px;
+    color: @eigth;
+    background: @one;
 }
 
 #custom-arrow2 {
     font-size: 17px;
-    color: #4c566a;
-    background: #d8dee9;
+    color: @two;
+    background: @eigth;
 }
 
 #custom-arrow3 {
     font-size: 17px;
-    color: #88c0d0;
-    background: #4c566a;
+    color: @three;
+    background: @two;
 }
 
 #custom-arrow4 {
     font-size: 17px;
-    color: #434c5e;
-    background: #88c0d0;
+    color: @four;
+    background: @three;
 }
 
 #custom-arrow5 {
     font-size: 17px;
-    color: #d8dee9;
-    background: #434c5e;
+    color: @five;
+    background: @four;
 }
 
 #custom-arrow6 {
     font-size: 17px;
-    color: #5e81ac;
-    background: #d8dee9;
+    color: @six;
+    background: @five;
 }
 
 #custom-arrow7 {
     font-size: 17px;
-    color: #2e3440;
-    background: #5e81ac;
+    color: @seven;
+    background: @six;
 }
 
 #custom-arrow8 {
     font-size: 17px;
-    color: #eceff4;
-    background: #2e3440;
+    color: @eigth;
+    background: @seven;
+}
+
+#custom-arrow9 {
+    font-size: 17px;
+    color: @one;
+    background: @eigth;
 }
 
 #custom-arrow10 {

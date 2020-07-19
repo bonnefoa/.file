@@ -21,12 +21,19 @@ set $term kitty
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 default_border pixel
+default_orientation vertical
+
+exec swayidle \
+     timeout 300 'swaylock -c 000000' \
+     timeout 600 'swaymsg "output * dpms off"' \
+     resume 'swaymsg "output * dpms on"' \
+     before-sleep 'swaylock -c 000000'
+
+# for_window [class="Firefox"] inhibit_idle fullscreen
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg $(ls /home/sora/wallpaper/* | shuf -n1) fit
-
+output * bg $(ls ~/wallpaper/* | shuf -n1) fit #000000 
 output * scale 2
 
 input "1739:52619:SYNA8006:00_06CB:CD8B_Touchpad" {
@@ -153,10 +160,6 @@ input "1739:52619:SYNA8006:00_06CB:CD8B_Touchpad" {
 # Resizing containers:
 #
 mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px

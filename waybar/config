@@ -6,6 +6,7 @@
     "layer": "top",
     "position": "top",
     "height": 22,
+    "width": "",
 
     "modules-left": [
     	"sway/mode",
@@ -14,23 +15,28 @@
         "sway/window"
     ],
 
+    // "modules-center": ["custom/spotifyd" ],
+
     "modules-right": [
         "custom/arrow1",
+        "idle_inhibitor",
+        "custom/arrowIdle",
         "pulseaudio",
         "custom/arrow2",
         "network",
         "custom/arrow3",
-        "memory",
+        "network#network2",
         "custom/arrow4",
-        "cpu",
+        "memory",
         "custom/arrow5",
-        "temperature",
+        "cpu",
         "custom/arrow6",
-        "battery",
+        "temperature",
         "custom/arrow7",
-        "tray",
-        "clock#date",
+        "battery",
         "custom/arrow8",
+        "clock#date",
+        "custom/arrow9",
         "clock#time"
     ],
 
@@ -56,6 +62,22 @@
         "tooltip": false
     },
 
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+
+    "custom/spotifyd": {
+        "format": " {}",
+        "max-length": 80,
+        "interval": 3, 
+        "exec": "echo `playerctl metadata artist` - `playerctl metadata title`",
+        "exec-if": "pgrep spotifyd"
+    },
+
     "clock#time": {
         "interval": 10,
         "format": "{:%H:%M}",
@@ -79,16 +101,6 @@
         }
     },
 
-    "custom/keyboard-layout": {
-      "exec": "~/.config/waybar/layout.sh",
-      // Interval set only as a fallback, as the value is updated by signal
-      //"interval": 5,
-      "format": " {}", // Icon: keyboard
-      // Signal sent by Sway key binding (~/.config/sway/key-bindings)
-      "signal": 1, // SIGHUP
-      "tooltip": false
-    },
-
     "memory": {
         "interval": 5,
         "format": " {}%", // Icon: memory
@@ -100,11 +112,18 @@
 
     "network": {
         "interval": 5,
-        "format-wifi": " {essid} {signalStrength}% ▲ {bandwidthUpOctets} / ▼ {bandwidthDownOctets}", 
+        "format-wifi": " {essid} {signalStrength}%", 
         "format-ethernet": " {ifname}",
         "format-disconnected": "Disconnected",
         "tooltip": false
     },
+
+    "network#network2": {
+        "interval": 4,
+        "format-wifi": "▲ {bandwidthUpOctets} / ▼ {bandwidthDownOctets}", 
+        "tooltip": false
+    },
+
 
     "sway/mode": {
         "format": "<span style=\"italic\"> {}</span>", // Icon: expand-arrows-alt
@@ -210,6 +229,11 @@
     },
 
     "custom/arrow9": {
+        "format": "",
+        "tooltip": false
+    },
+
+    "custom/arrowIdle": {
         "format": "",
         "tooltip": false
     },
