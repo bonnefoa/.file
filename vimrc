@@ -19,22 +19,31 @@ Bundle 'tpope/vim-git.git'
 Bundle 'tpope/vim-repeat.git'
 Bundle 'tpope/vim-surround.git'
 Bundle 'tpope/vim-dispatch.git'
-" Bundle 'Valloric/YouCompleteMe.git'
+Bundle 'Valloric/YouCompleteMe.git'
 Bundle 'vim-scripts/matchit.zip'
 Bundle 'altercation/vim-colors-solarized'
-Bundle 'hynek/vim-python-pep8-indent'
+"Bundle 'hynek/vim-python-pep8-indent'
 Bundle 'ludovicchabant/vim-gutentags'
 Bundle 'junegunn/fzf'
 Bundle 'junegunn/fzf.vim'
-Bundle 'dag/vim-fish'
 Bundle 'kburdett/vim-nuuid.git'
+"Bundle 'dag/vim-fish'
 "Bundle 'majutsushi/tagbar'
 "Bundle 'ngmy/vim-rubocop'
 "Bundle 'JamshedVesuna/vim-markdown-preview'
 "Bundle 'hashivim/vim-terraform'
 "Bundle 'vim-scripts/mako.vim'
-"Bundle 'kana/vim-altr'
-"Bundle 'rhysd/vim-clang-format'
+"Bundle 'previm/previm'
+Bundle 'wannesm/wmgraphviz.vim'
+Bundle 'tex/vimpreviewpandoc'
+Bundle 'ambv/black', {'rtp': 'vim'}
+Bundle 'mtth/scratch.vim'
+"Bundle 'jremmen/vim-ripgrep.git'
+
+Bundle 'kana/vim-altr'
+Bundle 'rhysd/vim-clang-format'
+Bundle 'skywind3000/asyncrun.vim'
+Bundle 'vhdirk/vim-cmake'
 
 call vundle#end()
 
@@ -53,9 +62,13 @@ let g:mapleader = ','
 let maplocalleader = ','
 let g:maplocalleader = ','
 
+let g:syntastic_check_on_open = 1
+let g:syntastic_lua_checkers = ["luac", "luacheck"]
+let g:syntastic_lua_luacheck_args = "--no-unused-args"
 let g:syntastic_vim_checkers = ['vint']
 let g:syntastic_go_checkers = ['govet', 'errcheck', 'go', 'golint']
 let g:syntastic_python_checkers=['flake8']
+let g:syntastic_quiet_messages = { "type": "style" }
 let g:syntastic_json_checkers=['jsonlint']
 let g:syntastic_ruby_checkers=['mri', 'rubocop']
 let g:syntastic_python_flake8_args='--ignore=E501,E225'
@@ -64,6 +77,7 @@ let g:clang_format#auto_formatexpr = 1
 let vim_markdown_preview_github=1
 let vim_markdown_preview_hotkey='<C-m>'
 let vim_markdown_preview_browser='Google Chrome'
+let g:WMGraphviz_output = 'png'
 
 set wildignore+=*.o,*.obj,.git,dist,deps,logs,*.pyc,**/target/**,*.d,docs,*.o,autom4te.cache
 set wildignore+=build-aux,doxydoc,*.la,*.sign,*.pub,*.trs,*.Po,*.pyo
@@ -73,6 +87,7 @@ set wildignore+=*_check
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
 nmap <silent> <leader>so :so $MYVIMRC<CR>
 
+nmap <silent> <leader>a <Plug>(altr-forward)
 
 let g:UltiSnipsExpandTrigger='<leader>s'
 " empty search
@@ -162,7 +177,8 @@ set expandtab
 
 let g:gutentags_dont_load=0
 let g:gutentags_ctags_exclude = ['*.sql', 'parts', 'eggs', 'build', 'node_modules']
-let g:gutentags_exclude_project_root = ['/usr/local', '/home/sora']
+let g:gutentags_exclude_project_root = ['/usr/local', '/home/sora', '/home/git-repos/cloudops']
+let g:ycm_disable_for_files_larger_than_kb = 10000
 
 func! DeleteTrailingWS()
     exe 'normal mz'
@@ -185,7 +201,7 @@ fun! ReadMan()
   " Assign current word under cursor to a script variable:
   let s:man_word = expand('<cword>')
   " Open a new window:
-  :exe ':Sscratch'
+  :exe ':Scratch'
   " delete everything
   :exe ':1,$d'
   " Read in the manpage for man_word (col -b is for formatting):
@@ -212,6 +228,7 @@ let g:ycm_always_populate_location_list = 1
 let g:ycm_gocode_binary_path = "$GOPATH/bin/gocode-gomod"
 let g:ycm_godef_binary_path = "$GOPATH/bin/godef"
 
+:autocmd BufRead *.cfg setlocal noexpandtab
 :autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
 :autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 :autocmd FileType json setlocal ts=2 sts=2 sw=2 expandtab
