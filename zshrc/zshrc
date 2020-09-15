@@ -1,6 +1,7 @@
-export ZPLUG_HOME=$HOME/git-repos/zplug
-export GOROOT=/usr/lib/go/
+export HISTFILE=~/.zistory
+export HISTSIZE=2000000
 
+export ZPLUG_HOME=$HOME/git-repos/zplug
 source $ZPLUG_HOME/init.zsh
 
 zplug "plugins/fzf", from:oh-my-zsh
@@ -14,11 +15,13 @@ fi
 zplug "~/git-repos/.file/zplug/misc", from:local
 zplug "~/git-repos/.file/zplug/theme", from:local, as:theme
 zplug "~/git-repos/.file/zplug/kube", from:local, defer:3
+zplug "~/git-repos/.file/zplug/gcloud", from:local
+
 zplug "~/git-repos/.file/zplug/linux", from:local, if:"[[ $OSTYPE == *linux* ]]"
 zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *darwin* ]]"
 
 zplug "seebi/dircolors-solarized"
-zplug "changyuheng/fz", defer:1
+zplug "changyuheng/fz"
 zplug "rupa/z", use:z.sh
 
 zplug "plugins/kubectl", from:oh-my-zsh, defer:2

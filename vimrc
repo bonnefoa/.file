@@ -39,6 +39,7 @@ Bundle 'tex/vimpreviewpandoc'
 Bundle 'ambv/black', {'rtp': 'vim'}
 Bundle 'mtth/scratch.vim'
 "Bundle 'jremmen/vim-ripgrep.git'
+Bundle 'jceb/vim-orgmode'
 
 Bundle 'kana/vim-altr'
 Bundle 'rhysd/vim-clang-format'
