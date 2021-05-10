@@ -19,7 +19,7 @@ zplug "~/git-repos/.file/zplug/kube", from:local, defer:3
 zplug "~/git-repos/.file/zplug/gcloud", from:local
 
 zplug "~/git-repos/.file/zplug/linux", from:local, if:"[[ $OSTYPE == *linux* ]]"
-zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *darwin* ]]"
+zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *darwin* ]]", defer:1
 
 zplug "seebi/dircolors-solarized"
 zplug "changyuheng/fz", defer:1
