@@ -2,9 +2,11 @@ set nocompatible
 filetype off
 
 set exrc
-set rtp+=~/.vim/bundle/Vundle.vim/
+set rtp+=~/.vim/bundle/vundle
 call vundle#begin()
 
+Bundle 'vim-scripts/utl.vim'
+Bundle 'skywind3000/asyncrun.vim'
 Bundle 'fatih/vim-go'
 Bundle 'gmarik/vundle'
 Bundle 'SirVer/ultisnips'
@@ -19,7 +21,7 @@ Bundle 'tpope/vim-git.git'
 Bundle 'tpope/vim-repeat.git'
 Bundle 'tpope/vim-surround.git'
 Bundle 'tpope/vim-dispatch.git'
-Bundle 'Valloric/YouCompleteMe.git'
+" Bundle 'Valloric/YouCompleteMe.git'
 Bundle 'vim-scripts/matchit.zip'
 Bundle 'altercation/vim-colors-solarized'
 "Bundle 'hynek/vim-python-pep8-indent'
@@ -43,7 +45,6 @@ Bundle 'jceb/vim-orgmode'
 
 Bundle 'kana/vim-altr'
 Bundle 'rhysd/vim-clang-format'
-Bundle 'skywind3000/asyncrun.vim'
 Bundle 'vhdirk/vim-cmake'
 
 call vundle#end()
@@ -72,13 +73,14 @@ let g:syntastic_python_checkers=['flake8']
 let g:syntastic_quiet_messages = { "type": "style" }
 let g:syntastic_json_checkers=['jsonlint']
 let g:syntastic_ruby_checkers=['mri', 'rubocop']
-let g:syntastic_python_flake8_args='--ignore=E501,E225'
+"let g:syntastic_python_flake8_args='--ignore=E501,E225'
 let g:syntastic_always_populate_loc_list = 1
 let g:clang_format#auto_formatexpr = 1
 let vim_markdown_preview_github=1
 let vim_markdown_preview_hotkey='<C-m>'
 let vim_markdown_preview_browser='Google Chrome'
 let g:WMGraphviz_output = 'png'
+"let g:syntastic_debug=3
 
 set wildignore+=*.o,*.obj,.git,dist,deps,logs,*.pyc,**/target/**,*.d,docs,*.o,autom4te.cache
 set wildignore+=build-aux,doxydoc,*.la,*.sign,*.pub,*.trs,*.Po,*.pyo
@@ -103,7 +105,7 @@ nnoremap <silent> <Leader>`  :Marks<CR>
 nnoremap <silent> <Leader>B  :History<CR>
 nnoremap <silent> <Leader>S  :call RgFromSearch()<CR>
 
-" RipGrep
+"" RipGrep
 function! RgFromSearch()
   let search =  getreg('/')
   " translate vim regular expression to perl regular expression.
@@ -177,7 +179,7 @@ set shiftwidth=4
 set expandtab
 
 let g:gutentags_dont_load=0
-let g:gutentags_ctags_exclude = ['*.sql', 'parts', 'eggs', 'build', 'node_modules']
+let g:gutentags_ctags_exclude = ['*.sql', 'parts', 'eggs', 'build', 'node_modules', "*.tf"]
 let g:gutentags_exclude_project_root = ['/usr/local', '/home/sora', '/home/git-repos/cloudops']
 let g:ycm_disable_for_files_larger_than_kb = 10000
 
@@ -228,6 +230,10 @@ let g:ycm_always_populate_location_list = 1
 "let g:ycm_python_binary_path = 'python'
 let g:ycm_gocode_binary_path = "$GOPATH/bin/gocode-gomod"
 let g:ycm_godef_binary_path = "$GOPATH/bin/godef"
+
+let g:utl_cfg_hdl_scm_http_system = "silent !open '%u#%f'"
+set foldlevelstart=20
+let g:go_gopls_enabled = 1
 
 :autocmd BufRead *.cfg setlocal noexpandtab
 :autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
