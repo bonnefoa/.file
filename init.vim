@@ -32,7 +32,6 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'wannesm/wmgraphviz.vim'
 Plug 'ambv/black', {'rtp': 'vim'}
-Plug 'mtth/scratch.vim'
 Plug 'jceb/vim-orgmode'
 
 Plug 'kana/vim-altr'
@@ -96,7 +95,6 @@ command! -bang -nargs=* Rg
 
 nmap <leader>] :cn<cr>
 nmap <leader>[ :cp<cr>
-nmap <leader>g :YcmCompleter GoToDefinition<cr>
 nnoremap <leader>cd :cd %:p:h<CR>
 
 map <C-h> <C-w>h
@@ -160,43 +158,13 @@ endfunc
 
 autocmd BufWrite *.* call DeleteTrailingWS()
 set tabpagemax=200
+set completeopt=menuone,longest,preview
 
 set directory=~/.vim/tmp/swap/
 
 highlight ExtraWhitespace ctermbg=red guibg=red
 
 let $GROFF_NO_SGR=1
-
-fun! ReadMan()
-  " Assign current word under cursor to a script variable:
-  let s:man_word = expand('<cword>')
-  " Open a new window:
-  :exe ':Scratch'
-  " delete everything
-  :exe ':1,$d'
-  " Read in the manpage for man_word (col -b is for formatting):
-  :exe ':r!man 3 ' . s:man_word . ' | col -b'
-  " Goto first line...
-  :exe ':goto'
-  " and delete it:
-  :exe ':delete'
-  " finally set file type to 'man':
-  :exe ':set filetype=man'
-endfun
-" Map the K key to the ReadMan function:
-map K :call ReadMan()<CR>
-
-set completeopt=menuone,longest,preview
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_confirm_extra_conf=0
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 0
-let g:ycm_always_populate_location_list = 1
-"let g:go_auto_type_info = 1
-"let g:ycm_python_binary_path = 'python'
-let g:ycm_gocode_binary_path = "$GOPATH/bin/gocode-gomod"
-let g:ycm_godef_binary_path = "$GOPATH/bin/godef"
 
 let g:utl_cfg_hdl_scm_http_system = "silent !open '%u#%f'"
 set foldlevelstart=20
@@ -252,13 +220,6 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
