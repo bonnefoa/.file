@@ -24,6 +24,7 @@ zplug "~/git-repos/.file/zplug/mac", from:local, if:"[[ $OSTYPE == *darwin* ]]",
 zplug "seebi/dircolors-solarized"
 zplug "changyuheng/fz", defer:1
 zplug "rupa/z", use:z.sh
+zplug "cheat/cheat", use:scripts/cheat.zsh
 
 zplug "plugins/kubectl", from:oh-my-zsh, defer:2
 zplug "~/git-repos/kubectl-fzf", from:local, defer:3
